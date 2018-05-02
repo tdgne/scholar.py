@@ -512,7 +512,7 @@ class ScholarArticleParser(object):
 
     def _path2url(self, path):
         """Helper, returns full URL in case path isn't one."""
-        if path.startswith('http://'):
+        if path.startswith('http://') or path.startswith('https://'):
             return path
         if not path.startswith('/'):
             path = '/' + path
@@ -982,7 +982,7 @@ class ScholarQuerier(object):
         # to Google.
         soup = SoupKitchen.make_soup(html)
 
-        tag = soup.find(name='form', attrs={'id': 'gs_settings_form'})
+        tag = soup.find(name='form', attrs={'id': 'gs_bdy_frm'})
         if tag is None:
             ScholarUtils.log('info', 'parsing settings failed: no form')
             return False
@@ -1142,7 +1142,7 @@ def csv(querier, header=False, sep='|'):
 def citation_export(querier):
     articles = querier.articles
     for art in articles:
-        print(art.as_citation() + '\n')
+        print(art.as_citation().decode('utf-8') + '\n')
 
 
 def main():
